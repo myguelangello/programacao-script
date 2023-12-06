@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--   <link rel="stylesheet" type="text/css" href="./style.css"> -->
+  <title>Document</title>
+</head>
+<style>
+  :root {
+    background-color: #fafafa;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+
+
+  #container {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+  }
+
+  #form-action {
+    width: 400px;
+    height: 400px;
+    padding: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 12px;
+    border: #d4d4d8 solid 1px;
+    background-color: #e4e4e7;
+  }
+
+  input,
+  button {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: #d4d4d8 solid 1px;
+    width: 80%;
+  }
+
+  button {
+    background-color: #3b82f6;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  button:hover {
+    background-color: #2563eb;
+  }
+
+  input:hover {
+    background-color: #eff6ff;
+  }
+
+  span {
+    text-align: center;
+  }
+</style>
+
+<body>
+  <main id="container">
+    <form id="form-action" action="/processar" method="post">
+      <label for="numero">Digite um número:</label>
+      <input type="number" id="numero" name="numero" placeholder="Escolha um número aleatório." required>
+      <button type="submit" onclick="processar()">Enviar</button>
+
+      <span id="resultado"></span>
+    </form>
+
+
+  </main>
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    document.getElementById('form-action').addEventListener('submit', function (event) {
+      event.preventDefault();
+      processar();
+    });
+  });
+
+  function processar() {
+    const numero = document.getElementById('numero').value;
+    fetch('/processar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        numero
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('resultado').innerHTML = `O resultado do número +2 é: ${data.resultado}`;
+      })
+      .catch(error => {
+        alert('Erro na requisição');
+        console.error('Erro na requisição:', error);
+      });
+  }
+</script>
+
+</html>
